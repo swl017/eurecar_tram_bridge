@@ -3,7 +3,7 @@
   <!-- 2020-09-23 local path holding field test sw-->
   <arg name="lane_topic_name"        value="final_waypoints/local_coordinate" />
   <arg name="frenet_path_topic_name" value="frenet_path" />
-  <arg name="use_frenet_candidates"  value="true" />
+  <arg name="use_frenet_candidates"  value="false" />
   <!-- param for collision check node -->
   <arg name="base_frame_id"          default="base_link"/>
   <arg name="obstacle_radius"        default="0.6"/>
@@ -20,9 +20,9 @@
   <arg name="obstacle_padding"       default="0.6"/>
 
 
-  <include file="$(find tram_odom)/launch/tram_odometry.launch"/>
+  <!-- <include file="$(find tram_odom)/launch/tram_odometry.launch"/> -->
+  <include file="$(find veloster_odom)/launch/veloster_odometry.launch"/>
   <include file="$(find ekf_localizer)/launch/ekf_localizer.launch"/>
-  <include file="$(find costmap_generator)/launch/costmap_generator.launch"/>
   <include file="$(find eurecar_tram_bridge)/launch/eurecar_tram_bridge.launch">
     <arg name="lane_topic_name"        value="$(arg lane_topic_name)" />
     <arg name="frenet_path_topic_name" value="$(arg frenet_path_topic_name)" />
@@ -36,6 +36,7 @@
     </node>
   </group>
   <group unless="$(arg use_frenet_candidates)">
+    <include file="$(find costmap_generator)/launch/costmap_generator.launch"/>
     <include file="$(find points_preprocessor)/launch/ring_ground_filter.launch">
       <arg name="point_topic" value="/transformed_pointcloud" />
       <arg name="remove_floor" default="true" />
