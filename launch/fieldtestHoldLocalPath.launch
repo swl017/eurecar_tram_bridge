@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 2020-09-23 local path holding field test sw-->
+  <arg name="lane_topic_name"        value="final_waypoints/local_coordinate" />
+  <arg name="frenet_path_topic_name" value="frenet_path" />
+  <arg name="use_frenet_candidates"  value="true" />
+  <!-- param for collision check node -->
+  <arg name="base_frame_id"          default="base_link"/>
+  <arg name="obstacle_radius"        default="0.6"/>
+  <arg name="collision_cost"         default="10"/>
+  <arg name="curvature_cost"         default="100" />
+  <arg name="trasition_cost"         default="10" />
+  <arg name="weight_curvature"       default="1" />
+  <arg name="weight_trasition"       default="0.5" />
+  <arg name="weight_consistancy"     default="0.5" />
+  <arg name="weight_collision"       default="2" />
+  <arg name="path_block_threshold"   default="2.0" />
+  <!-- param for behavior planner node -->
+  <arg name="local_update_horizon"   default="15.0" />
+  <arg name="obstacle_padding"       default="0.6"/>
+
+
+  <include file="$(find tram_odom)/launch/tram_odometry.launch"/>
+  <include file="$(find ekf_localizer)/launch/ekf_localizer.launch"/>
+  <include file="$(find costmap_generator)/launch/costmap_generator.launch"/>
+  <include file="$(find eurecar_tram_bridge)/launch/eurecar_tram_bridge.launch">
+    <arg name="lane_topic_name"        value="$(arg lane_topic_name)" />
+    <arg name="frenet_path_topic_name" value="$(arg frenet_path_topic_name)" />
+    <arg name="use_frenet_candidates"  value="$(arg use_frenet_candidates)" />
+  </include>
+  <group if="$(arg use_frenet_candidates)">
+    <node pkg="costmap_based_local_planner" type="behavior_planner_node" name="behavior_planner_node" output="screen">   
+      <param name="base_frame_id"             value="$(arg base_frame_id)"/> 
+      <param name="obstacle_padding"          value="$(arg obstacle_padding)"/>
+      <param name="local_update_horizon"      value="$(arg local_update_horizon)" />
+    </node>
+  </group>
+  <group unless="$(arg use_frenet_candidates)">
+    <include file="$(find points_preprocessor)/launch/ring_ground_filter.launch">
+      <arg name="point_topic" value="/transformed_pointcloud" />
+      <arg name="remove_floor" default="true" />
+      <arg name="sensor_model" default="64" />        
+      <arg name="sensor_height" default="1.80" />
+      <arg name="max_slope" default="10.0" />
+      <arg name="vertical_thres" default="0.08" />
+      <!-- ??????? -->
+      <arg name="no_ground_point_topic" value="/merged/points_ground" />
+      <arg name="ground_point_topic" value="/merged/points_no_ground" />
+      </include>
+    <include file="$(find costmap_based_local_planner)/launch/costmap_based_local_planner.launch"/>
+  </group>
+</launch>

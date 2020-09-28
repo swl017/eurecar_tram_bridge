@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Visualization node-->
+  <include file = "$(find points_preprocessor)/launch/ring_ground_filter.launch"/>
+  <include file = "$(find lidar_euclidean_cluster_detect)/launch/lidar_euclidean_cluster_detect.launch"/>
+  <include file = "$(find ab3dmot)/launch/ab3dmot.launch"/>
+</launch>
