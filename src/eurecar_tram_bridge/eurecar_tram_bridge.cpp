@@ -72,8 +72,6 @@ void eurecar_tram_bridge::AckermannCommandCallback(const ackermann_msgs::Ackerma
 
 void eurecar_tram_bridge::PathCallback(const nav_msgs::Path::ConstPtr &msg)
 {
-    ROS_WARN("Bridge path callback");
-
     /* @brief convert path messages (possibly from frenet planner) to lane array(local_trajectories topic from trajectory_generate_node) 
      *        msg       : local coordinate
      *        lane_array: ??(TODO)
@@ -94,8 +92,6 @@ void eurecar_tram_bridge::LaneCallback(const autoware_msgs::Lane::ConstPtr &msg)
 
 void eurecar_tram_bridge::FrenetLocalCallback(const eurecar_msgs::frenetPath &msg)
 {
-    ROS_WARN("Bridge Frenet local callback");
-
     /* @brief convert path messages (possibly from frenet planner) to lane array(local_trajectories topic from trajectory_generate_node) 
      *        msg       : local coordinate
      *        lane_array: ??(TODO)

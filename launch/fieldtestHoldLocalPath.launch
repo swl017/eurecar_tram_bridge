@@ -3,7 +3,7 @@
   <!-- 2020-09-23 local path holding field test sw-->
   <arg name="lane_topic_name"        value="final_waypoints/local_coordinate" />
   <arg name="frenet_path_topic_name" value="frenet_path" />
-  <arg name="use_frenet_candidates"  value="false" />
+  <arg name="use_frenet_candidates"  value="true" />
   <!-- param for collision check node -->
   <arg name="base_frame_id"          default="base_link"/>
   <arg name="obstacle_radius"        default="0.6"/>
