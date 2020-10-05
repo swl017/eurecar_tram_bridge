@@ -14,19 +14,22 @@ eurecar_tram_bridge::eurecar_tram_bridge() : nh_(""), private_nh_("~"), steering
     // parameters
     private_nh_.param<std::string>("lane_topic_name", lane_topic_name_, "final_waypoints/local_coordinate");
     private_nh_.param<std::string>("frenet_path_topic_name", frenet_path_topic_name_, "frenet_path");
+    private_nh_.param<std::string>("topic_name_for_path_following_controller", topic_name_for_path_following_controller_,
+                                     "vehicle/local_wpt/splined/origin/HOLDLOCALPATH");
     private_nh_.param<bool>("use_frenet_candidates", use_frenet_candidates_, true);
 
     // subscribers
-    ackermann_command_subscriber_ = nh_.subscribe("Ackermann/command", 1, &eurecar_tram_bridge::AckermannCommandCallback, this);
+    // ackermann_command_subscriber_ = nh_.subscribe("Ackermann/command", 1, &eurecar_tram_bridge::AckermannCommandCallback, this);
     eurecar_can_t_subscriber_     = nh_.subscribe(common_ros_param::rosTopicName::VEH_CAN, 10, &eurecar_tram_bridge::EurecarCanCallback, this);
-    path_subscriber_              = nh_.subscribe("/vehicle/local_coor_wpt", 1, &eurecar_tram_bridge::PathCallback, this);
+    // path_subscriber_              = nh_.subscribe(frenet_path_topic_name_, 1, &eurecar_tram_bridge::PathCallback, this);
+    // path_subscriber_              = nh_.subscribe("/vehicle/local_coor_wpt", 1, &eurecar_tram_bridge::PathCallback, this);
     // path_subscriber_              = nh_.subscribe(common_ros_param::rosTopicName::VEH_LOCAL_WPT, 1, &eurecar_tram_bridge::PathCallback, this);
     lane_subscriber_              = nh_.subscribe(lane_topic_name_, 1, &eurecar_tram_bridge::LaneCallback, this);
     frenet_local_subscriber_      = nh_.subscribe(frenet_path_topic_name_, 1, &eurecar_tram_bridge::FrenetLocalCallback, this);
 
     // publishers
     ackermann_state_publisher_ = nh_.advertise<ackermann_msgs::AckermannDriveStamped>("Ackermann/veh_state", 1);
-    lane_to_path_publisher_ = nh_.advertise<nav_msgs::Path>("/final_waypoints/pathmsg", 1);
+    lane_to_path_publisher_ = nh_.advertise<nav_msgs::Path>(topic_name_for_path_following_controller_, 1);
     frenet_to_path_publisher_ = nh_.advertise<nav_msgs::Path>("frenet_path/pathmsg", 1);
     if(use_frenet_candidates_ == true){
         /* TODO: add more path candidates to local_weighted_trajectories

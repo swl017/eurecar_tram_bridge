@@ -54,6 +54,7 @@ private:
     // variables for parameters
     std::string frenet_path_topic_name_;
     std::string lane_topic_name_;
+    std::string topic_name_for_path_following_controller_;
     bool use_frenet_candidates_;
 
 };

@@ -1,0 +1,8 @@
+1. 데이터 흐름
+node: /frenet_path_planning_v3_node
+topic: /frenet/origin_optimal_frenet_path (Type: eurecar_msgs/frenetPath)
+node: /lwpt_spliner_node
+topic: /vehicle/local_wpt/splined/origin (Type: nav_msgs/Path)
+node: /eurecar_tram_bridge
+topic: /vehicle/local_wpt/splined/origin/HOLDLOCALPATH (Type: nav_msgs/Path)
+node: /Conventional_Controller

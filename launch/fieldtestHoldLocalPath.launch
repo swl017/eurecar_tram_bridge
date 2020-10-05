@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- 2020-09-23 local path holding field test sw-->
+  <!-- 2020-10-05 local path holding field test sw-->
   <arg name="lane_topic_name"        value="final_waypoints/local_coordinate" />
-  <arg name="frenet_path_topic_name" value="frenet_path" />
+  <arg name="frenet_path_topic_name" value="/frenet/origin_optimal_frenet_path" />
+  <arg name="topic_name_for_path_following_controller" value="vehicle/local_wpt/splined/origin/HOLDLOCALPATH" />
   <arg name="use_frenet_candidates"  value="true" />
   <!-- param for collision check node -->
   <arg name="base_frame_id"          default="base_link"/>
@@ -16,16 +17,19 @@
   <arg name="weight_collision"       default="2" />
   <arg name="path_block_threshold"   default="2.0" />
   <!-- param for behavior planner node -->
-  <arg name="local_update_horizon"   default="15.0" />
+  <arg name="local_update_horizon"   default="5.0" />
   <arg name="obstacle_padding"       default="0.6"/>
+  <arg name="invert_yaw_increment"   default="true"/>
+  <arg name="replan_time_interval"   default="1.0"/>
 
 
   <!-- <include file="$(find tram_odom)/launch/tram_odometry.launch"/> -->
-  <include file="$(find veloster_odom)/launch/veloster_odometry.launch"/>
-  <include file="$(find ekf_localizer)/launch/ekf_localizer.launch"/>
+  <!-- <include file="$(find veloster_odom)/launch/veloster_odometry.launch"/>
+  <include file="$(find ekf_localizer)/launch/ekf_localizer.launch"/> -->
   <include file="$(find eurecar_tram_bridge)/launch/eurecar_tram_bridge.launch">
     <arg name="lane_topic_name"        value="$(arg lane_topic_name)" />
     <arg name="frenet_path_topic_name" value="$(arg frenet_path_topic_name)" />
+    <arg name="topic_name_for_path_following_controller" value="$(arg topic_name_for_path_following_controller)" />
     <arg name="use_frenet_candidates"  value="$(arg use_frenet_candidates)" />
   </include>
   <group if="$(arg use_frenet_candidates)">
@@ -33,6 +37,9 @@
       <param name="base_frame_id"             value="$(arg base_frame_id)"/> 
       <param name="obstacle_padding"          value="$(arg obstacle_padding)"/>
       <param name="local_update_horizon"      value="$(arg local_update_horizon)" />
+      <param name="invert_yaw_increment"      value="$(arg invert_yaw_increment)" />
+      <param name="replan_time_interval"      value="$(arg replan_time_interval)" />
+      <remap from="/Odometry/ekf_estimated" to="/vehicle/pose" />
     </node>
   </group>
   <group unless="$(arg use_frenet_candidates)">
@@ -50,4 +57,8 @@
       </include>
     <include file="$(find costmap_based_local_planner)/launch/costmap_based_local_planner.launch"/>
   </group>
+  <include file="$(find conventional_controller)/launch/controller.launch">
+    <arg name="topic_name_local_path" value="$(arg topic_name_for_path_following_controller)" />
+  </include>
+
 </launch>

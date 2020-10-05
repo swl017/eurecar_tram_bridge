@@ -2,6 +2,7 @@
 <launch>
 <arg name="lane_topic_name"               default="final_waypoints/local_coordinate" />
 <arg name="frenet_path_topic_name"        default="frenet_path" />
+<arg name="topic_name_for_path_following_controller" default="vehicle/local_wpt/splined/origin" />
 <arg name="use_frenet_candidates"         default="true" />
 <arg name="path_candidates_sub"           default="frenet_path_candidates"/>
 <arg name="path_candidates_pub"           default="local_trajectories"/>
@@ -11,6 +12,7 @@
 <node name="eurecar_tram_bridge" pkg="eurecar_tram_bridge" type="eurecar_tram_bridge" output="screen">
   <param name="lane_topic_name" value="$(arg lane_topic_name)" />
   <param name="frenet_path_topic_name" value="$(arg frenet_path_topic_name)" />
+  <param name="topic_name_for_path_following_controller" value="$(arg topic_name_for_path_following_controller)" />
   <param name="use_frenet_candidates" value="$(arg use_frenet_candidates)" />
 </node>
 
