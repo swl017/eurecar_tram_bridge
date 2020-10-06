@@ -2,7 +2,7 @@
 <launch>
   <!-- 2020-10-05 local path holding field test sw-->
   <arg name="lane_topic_name"        value="final_waypoints/local_coordinate" />
-  <arg name="frenet_path_topic_name" value="/frenet/origin_optimal_frenet_path" />
+  <arg name="frenet_path_topic_name" value="/vehicle/local_wpt/frenet/origin" />
   <arg name="topic_name_for_path_following_controller" value="vehicle/local_wpt/splined/origin/HOLDLOCALPATH" />
   <arg name="use_frenet_candidates"  value="true" />
   <!-- param for collision check node -->
@@ -17,10 +17,10 @@
   <arg name="weight_collision"       default="2" />
   <arg name="path_block_threshold"   default="2.0" />
   <!-- param for behavior planner node -->
-  <arg name="local_update_horizon"   default="5.0" />
+  <arg name="local_update_horizon"   default="7.0" />
   <arg name="obstacle_padding"       default="0.6"/>
-  <arg name="invert_yaw_increment"   default="true"/>
-  <arg name="replan_time_interval"   default="1.0"/>
+  <arg name="invert_yaw_increment"   default="false"/>
+  <arg name="replan_time_interval"   default="10"/>
 
 
   <!-- <include file="$(find tram_odom)/launch/tram_odometry.launch"/> -->
@@ -39,7 +39,7 @@
       <param name="local_update_horizon"      value="$(arg local_update_horizon)" />
       <param name="invert_yaw_increment"      value="$(arg invert_yaw_increment)" />
       <param name="replan_time_interval"      value="$(arg replan_time_interval)" />
-      <remap from="/Odometry/ekf_estimated" to="/vehicle/pose" />
+      <!-- <remap from="/Odometry/ekf_estimated" to="/vehicle/pose" /> -->
     </node>
   </group>
   <group unless="$(arg use_frenet_candidates)">
