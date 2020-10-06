@@ -17,10 +17,10 @@
   <arg name="weight_collision"       default="2" />
   <arg name="path_block_threshold"   default="2.0" />
   <!-- param for behavior planner node -->
-  <arg name="local_update_horizon"   default="7.0" />
+  <arg name="local_update_horizon"   default="3.0" />
   <arg name="obstacle_padding"       default="0.6"/>
   <arg name="invert_yaw_increment"   default="false"/>
-  <arg name="replan_time_interval"   default="10"/>
+  <arg name="replan_time_interval"   default="1"/>
 
 
   <!-- <include file="$(find tram_odom)/launch/tram_odometry.launch"/> -->
